@@ -10,19 +10,15 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([
         (request: FastifyRequest) => {
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
           const signedCookie = request.cookies['token'];
 
           if (!signedCookie) {
             return null;
           }
 
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
           const unsignedResult = request.unsignCookie(signedCookie);
 
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
           if (unsignedResult.valid) {
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
             return unsignedResult.value;
           }
 
