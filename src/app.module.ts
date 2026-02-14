@@ -11,6 +11,8 @@ import { AuthModule } from './auth/auth.module';
 import { ProjectModule } from './project/project.module';
 import { SectionModule } from './section/section.module';
 
+import { JwtStrategy } from './jwt.strategy';
+
 @Module({
   imports: [
     ConfigModule.forRoot({ envFilePath: '.env', isGlobal: true }),
@@ -33,8 +35,9 @@ import { SectionModule } from './section/section.module';
     ProjectModule,
     SectionModule,
     AuthModule,
-    PassportModule.register({ defaultStrategy: 'jwt' }),
+    PassportModule,
   ],
   controllers: [AppController],
+  providers: [JwtStrategy],
 })
 export class AppModule {}
