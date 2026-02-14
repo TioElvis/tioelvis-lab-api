@@ -14,10 +14,29 @@ async function bootstrap() {
     new FastifyAdapter(),
   );
 
-  // CONFIG
-  app.enableCors({ methods });
+  app.enableCors({
+    methods,
+    origin: (origin, callback) => {
+      const isProduction = process.env.NODE_ENV === 'production';
 
-  await app.listen(process.env.PORT ?? 9000);
+      console.log('CORS origin:', origin);
+
+      const allowedOrigins = [
+        `https://${process.env.DOMAIN}`,
+        `https://www.${process.env.DOMAIN}`,
+      ];
+
+      if (!origin) return callback(null, true);
+
+      if (!isProduction || allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(new Error('Not allowed by CORS'), false);
+    },
+  });
+
+  await app.listen(process.env.PORT ?? 9000, '0.0.0.0');
 }
 
 void bootstrap();
