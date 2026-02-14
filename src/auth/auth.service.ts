@@ -33,7 +33,6 @@ export class AuthService {
       id: user._id,
     });
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
     res.setCookie('token', jwt, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
