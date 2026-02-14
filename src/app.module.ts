@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { JwtModule } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
@@ -17,6 +18,13 @@ import { SectionModule } from './section/section.module';
       useFactory: (config: ConfigService) => ({
         uri: config.get<string>('DB_URI'),
         dbName: config.get<string>('DB_NAME'),
+      }),
+    }),
+    JwtModule.registerAsync({
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        secret: config.get<string>('JWT_SECRET'),
+        signOptions: { expiresIn: '7d' },
       }),
     }),
     UserModule,
