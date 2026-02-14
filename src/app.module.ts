@@ -5,6 +5,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppController } from './app.controller';
 
 import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
 import { ProjectModule } from './project/project.module';
 import { SectionModule } from './section/section.module';
 
@@ -21,6 +22,7 @@ import { SectionModule } from './section/section.module';
     UserModule,
     ProjectModule,
     SectionModule,
+    AuthModule,
   ],
   controllers: [AppController],
 })
