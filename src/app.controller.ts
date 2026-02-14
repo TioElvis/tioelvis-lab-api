@@ -4,10 +4,10 @@ import { Controller, Get, Redirect } from '@nestjs/common';
 export class AppController {
   @Get('/')
   @Redirect('/health-check', 302)
-  RedirectToHealthCheck() {}
+  redirectToHealthCheck() {}
 
   @Get('/health-check')
-  HealthCheck() {
+  healthCheck() {
     return 'OK';
   }
 }
