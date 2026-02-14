@@ -3,6 +3,7 @@ import {
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
 import { NestFactory } from '@nestjs/core';
+import fastifyCookie from '@fastify/cookie';
 import { ValidationPipe } from '@nestjs/common';
 
 import { AppModule } from './app.module';
@@ -15,6 +16,9 @@ async function bootstrap() {
     new FastifyAdapter(),
   );
 
+  await app.register(fastifyCookie, {
+    secret: process.env.COOKIE_SECRET,
+  });
   app.enableCors({
     methods,
     origin: (origin, callback) => {

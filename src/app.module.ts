@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
+import { PassportModule } from '@nestjs/passport';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
@@ -21,6 +22,7 @@ import { SectionModule } from './section/section.module';
       }),
     }),
     JwtModule.registerAsync({
+      global: true,
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
         secret: config.get<string>('JWT_SECRET'),
@@ -31,6 +33,7 @@ import { SectionModule } from './section/section.module';
     ProjectModule,
     SectionModule,
     AuthModule,
+    PassportModule.register({ defaultStrategy: 'jwt' }),
   ],
   controllers: [AppController],
 })
