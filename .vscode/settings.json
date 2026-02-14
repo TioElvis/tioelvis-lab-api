@@ -1,0 +1,9 @@
+{
+  "symbols.files.associations": {
+    "*.module.ts": "nest",
+    "*.guard.ts": "nest-guard",
+    "*.service.ts": "nest-service",
+    "*.controller.ts": "nest-controller"
+  },
+  "cSpell.words": ["dotenv", "pids", "tioelvis"]
+}
