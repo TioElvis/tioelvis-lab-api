@@ -4,6 +4,10 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 
 import { AppController } from './app.controller';
 
+import { UserModule } from './user/user.module';
+import { ProjectModule } from './project/project.module';
+import { SectionModule } from './section/section.module';
+
 @Module({
   imports: [
     ConfigModule.forRoot({ envFilePath: '.env', isGlobal: true }),
@@ -11,8 +15,12 @@ import { AppController } from './app.controller';
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
         uri: config.get<string>('DB_URI'),
+        dbName: config.get<string>('DB_NAME'),
       }),
     }),
+    UserModule,
+    ProjectModule,
+    SectionModule,
   ],
   controllers: [AppController],
 })
