@@ -11,5 +11,6 @@ import { Section, SectionSchema } from './section.schema';
   ],
   controllers: [SectionController],
   providers: [SectionService],
+  exports: [SectionService],
 })
 export class SectionModule {}
