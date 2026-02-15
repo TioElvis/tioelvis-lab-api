@@ -138,36 +138,8 @@ export class ProjectService {
     }
   }
 
-  async removeSection(projectId: Types.ObjectId, sectionId: Types.ObjectId) {
-    const project = await this.findById(projectId);
-
-    if (!Types.ObjectId.isValid(sectionId)) {
-      throw new BadRequestException('Invalid section id');
-    }
-
-    if (!(project.sections as Types.ObjectId[]).includes(sectionId)) {
-      throw new BadRequestException('Section is not included to this project');
-    }
-
-    const section = await this.sectionService.findById(sectionId);
-
-    try {
-      await project.updateOne(
-        { $pull: { sections: section._id } },
-        { runValidators: true },
-      );
-
-      return 'Section removed successfully';
-    } catch (error) {
-      console.error('Error removing section:', error);
-      throw new BadRequestException('Failed to remove section');
-    }
-  }
-
   async delete(id: Types.ObjectId) {
     const project = await this.findById(id);
-
-    // TODO: Delete all sections of the project
 
     try {
       await project.deleteOne();

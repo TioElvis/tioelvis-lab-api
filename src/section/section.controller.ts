@@ -14,11 +14,8 @@ import { AuthGuard } from '@nestjs/passport';
 
 import { SectionService } from './section.service';
 
-import {
-  UpdateSectionDto,
-  UpdateSectionSectionsDto,
-} from './dto/update-section.dto';
 import { QuerySectionDto } from './dto/query-section.dto';
+import { UpdateSectionDto } from './dto/update-section.dto';
 import { CreateSectionDto } from './dto/create-section.dto';
 
 @Controller('section')
@@ -47,22 +44,6 @@ export class SectionController {
     @Body() body: UpdateSectionDto,
   ) {
     return await this.sectionService.update(id, body);
-  }
-
-  @Patch('add-section/:id')
-  async addSection(
-    @Param('id') id: Types.ObjectId,
-    @Body() { sectionId }: UpdateSectionSectionsDto,
-  ) {
-    return await this.sectionService.addSection(id, sectionId);
-  }
-
-  @Patch('remove-section/:id')
-  async removeSection(
-    @Param('id') id: Types.ObjectId,
-    @Body() { sectionId }: UpdateSectionSectionsDto,
-  ) {
-    return await this.sectionService.removeSection(id, sectionId);
   }
 
   @Delete('delete/:id')

@@ -14,11 +14,8 @@ import { AuthGuard } from '@nestjs/passport';
 
 import { ProjectService } from './project.service';
 
-import {
-  UpdateProjectDto,
-  UpdateProjectSectionsDto,
-} from './dto/update-project.dto';
 import { QueryProjectDto } from './dto/query-project.dto';
+import { UpdateProjectDto } from './dto/update-project.dto';
 import { CreateProjectDto } from './dto/create-project.dto';
 
 @Controller('project')
@@ -47,22 +44,6 @@ export class ProjectController {
     @Body() body: UpdateProjectDto,
   ) {
     return await this.projectService.update(id, body);
-  }
-
-  @Patch('add-section/:id')
-  async addSection(
-    @Param('id') projectId: Types.ObjectId,
-    @Body() { sectionId }: UpdateProjectSectionsDto,
-  ) {
-    return await this.projectService.addSection(projectId, sectionId);
-  }
-
-  @Patch('remove-section/:id')
-  async removeSection(
-    @Param('id') projectId: Types.ObjectId,
-    @Body() { sectionId }: UpdateProjectSectionsDto,
-  ) {
-    return await this.projectService.removeSection(projectId, sectionId);
   }
 
   @Delete('delete/:id')

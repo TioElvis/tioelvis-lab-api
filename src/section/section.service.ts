@@ -34,7 +34,13 @@ export class SectionService {
       throw new BadRequestException('Section with this slug already exists');
     }
 
-    await this.projectService.findById(body.projectId);
+    if (body.projectId) {
+      await this.projectService.findById(body.projectId);
+    }
+
+    if (body.parentId) {
+      await this.findById(body.parentId);
+    }
 
     const payload: Section = {
       ...body,
@@ -43,7 +49,13 @@ export class SectionService {
     try {
       const section = await this.sectionModel.create(payload);
 
-      await this.projectService.addSection(body.projectId, section._id);
+      if (body.projectId) {
+        await this.projectService.addSection(body.projectId, section._id);
+      }
+
+      if (body.parentId) {
+        await this.addSection(body.parentId, section._id);
+      }
 
       return 'Section created successfully';
     } catch (error) {
@@ -148,42 +160,13 @@ export class SectionService {
     }
   }
 
-  async removeSection(parentId: Types.ObjectId, childrenId: Types.ObjectId) {
-    const parentSection = await this.findById(parentId);
-
-    if (!Types.ObjectId.isValid(childrenId)) {
-      throw new BadRequestException('Invalid section children id');
-    }
-
-    const childSection = await this.findById(childrenId);
-
-    if (
-      !(parentSection.sections as Types.ObjectId[]).includes(childSection._id)
-    ) {
-      throw new BadRequestException(
-        'Section children is not part of this section',
-      );
-    }
-
-    try {
-      await parentSection
-        .updateOne({ $pull: { sections: childrenId } }, { runValidators: true })
-        .exec();
-
-      return 'Section children removed successfully';
-    } catch (error) {
-      console.error('Error removing section children:', error);
-      throw new BadRequestException('Failed to remove section children');
-    }
-  }
-
   async deleteOne(id: Types.ObjectId) {
     const section = await this.findById(id);
 
     try {
       await section.deleteOne();
 
-      return 'Section deleted successfully';
+      return 'Section and sub-sections deleted successfully';
     } catch (error) {
       console.error('Error deleting section:', error);
       throw new BadRequestException('Failed to delete section');

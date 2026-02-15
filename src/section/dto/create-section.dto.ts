@@ -1,5 +1,11 @@
+import {
+  IsMongoId,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 import { Types } from 'mongoose';
-import { IsMongoId, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class CreateSectionDto {
   @IsNotEmpty()
@@ -18,7 +24,11 @@ export class CreateSectionDto {
   @IsNumber()
   order: number;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsMongoId()
-  projectId: Types.ObjectId;
+  projectId?: Types.ObjectId;
+
+  @IsOptional()
+  @IsMongoId()
+  parentId?: Types.ObjectId;
 }
