@@ -29,7 +29,12 @@ async function bootstrap() {
         `https://www.${process.env.DOMAIN}`,
       ];
 
-      if (!origin) return callback(null, true);
+      if (!origin) {
+        if (isProduction) {
+          return callback(new Error('Not allowed by CORS'), false);
+        }
+        return callback(null, true);
+      }
 
       if (!isProduction || allowedOrigins.includes(origin)) {
         return callback(null, true);
@@ -37,6 +42,7 @@ async function bootstrap() {
 
       return callback(new Error('Not allowed by CORS'), false);
     },
+    credentials: true,
   });
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
