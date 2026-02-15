@@ -26,6 +26,18 @@ export class SectionService {
   ) {}
 
   async create(body: CreateSectionDto) {
+    if (body.projectId && body.parentId) {
+      throw new BadRequestException(
+        'A section cannot have both projectId and parentId',
+      );
+    }
+
+    if (!body.projectId && !body.parentId) {
+      throw new BadRequestException(
+        'Either projectId or parentId must be provided',
+      );
+    }
+
     const existingSection = await this.sectionModel.findOne({
       slug: body.slug,
     });
@@ -107,6 +119,7 @@ export class SectionService {
     if (body.slug && body.slug !== section.slug) {
       const existingSection = await this.sectionModel.findOne({
         slug: body.slug,
+        _id: { $ne: id },
       });
 
       if (existingSection) {
@@ -125,9 +138,9 @@ export class SectionService {
   }
 
   async addSection(parentId: Types.ObjectId, childrenId: Types.ObjectId) {
-    const parentSection = await this.findById(parentId);
+    const parent = await this.findById(parentId);
 
-    if (parentSection._id.equals(childrenId)) {
+    if (parent._id.equals(childrenId)) {
       throw new BadRequestException('Section cannot be a child of itself');
     }
 
@@ -135,20 +148,18 @@ export class SectionService {
       throw new BadRequestException('Invalid section children id');
     }
 
-    const childSection = await this.findById(childrenId);
+    const child = await this.findById(childrenId);
 
-    if (
-      (parentSection.sections as Types.ObjectId[]).includes(childSection._id)
-    ) {
+    if ((parent.sections as Types.ObjectId[]).includes(child._id)) {
       throw new BadRequestException(
         'Section children is already added to this section',
       );
     }
 
     try {
-      await parentSection
+      await parent
         .updateOne(
-          { $addToSet: { sections: childSection._id } },
+          { $addToSet: { sections: child._id } },
           { runValidators: true },
         )
         .exec();
@@ -160,7 +171,7 @@ export class SectionService {
     }
   }
 
-  async deleteOne(id: Types.ObjectId) {
+  async delete(id: Types.ObjectId) {
     const section = await this.findById(id);
 
     try {

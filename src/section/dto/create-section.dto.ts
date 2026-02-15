@@ -4,6 +4,7 @@ import {
   IsNumber,
   IsOptional,
   IsString,
+  Min,
 } from 'class-validator';
 import { Types } from 'mongoose';
 
@@ -22,6 +23,7 @@ export class CreateSectionDto {
 
   @IsNotEmpty()
   @IsNumber()
+  @Min(0)
   order: number;
 
   @IsOptional()

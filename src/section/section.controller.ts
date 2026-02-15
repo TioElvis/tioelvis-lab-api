@@ -48,6 +48,6 @@ export class SectionController {
 
   @Delete('delete/:id')
   async delete(@Param('id') id: Types.ObjectId) {
-    return await this.sectionService.deleteOne(id);
+    return await this.sectionService.delete(id);
   }
 }
