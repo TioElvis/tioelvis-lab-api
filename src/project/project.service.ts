@@ -1,5 +1,7 @@
 import {
   BadRequestException,
+  forwardRef,
+  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -19,6 +21,7 @@ import { SectionService } from 'src/section/section.service';
 export class ProjectService {
   constructor(
     @InjectModel(Project.name) private projectModel: Model<ProjectDocument>,
+    @Inject(forwardRef(() => SectionService))
     private sectionService: SectionService,
   ) {}
 
@@ -112,15 +115,19 @@ export class ProjectService {
   async addSection(projectId: Types.ObjectId, sectionId: Types.ObjectId) {
     const project = await this.findById(projectId);
 
+    if (!Types.ObjectId.isValid(sectionId)) {
+      throw new BadRequestException('Invalid section id');
+    }
+
     if ((project.sections as Types.ObjectId[]).includes(sectionId)) {
       throw new BadRequestException('Section is already added to this project');
     }
 
-    // TODO: Check if the section exists
+    const section = await this.sectionService.findById(sectionId);
 
     try {
       await project.updateOne(
-        { $addToSet: { sections: sectionId } },
+        { $addToSet: { sections: section._id } },
         { runValidators: true },
       );
 
@@ -134,15 +141,19 @@ export class ProjectService {
   async removeSection(projectId: Types.ObjectId, sectionId: Types.ObjectId) {
     const project = await this.findById(projectId);
 
+    if (!Types.ObjectId.isValid(sectionId)) {
+      throw new BadRequestException('Invalid section id');
+    }
+
     if (!(project.sections as Types.ObjectId[]).includes(sectionId)) {
       throw new BadRequestException('Section is not included to this project');
     }
 
-    // TODO: Check if the section exists
+    const section = await this.sectionService.findById(sectionId);
 
     try {
       await project.updateOne(
-        { $pull: { sections: sectionId } },
+        { $pull: { sections: section._id } },
         { runValidators: true },
       );
 
