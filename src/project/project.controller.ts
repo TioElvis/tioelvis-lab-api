@@ -19,11 +19,11 @@ import { UpdateProjectDto } from './dto/update-project.dto';
 import { CreateProjectDto } from './dto/create-project.dto';
 
 @Controller('project')
-@UseGuards(AuthGuard('jwt'))
 export class ProjectController {
   constructor(private readonly projectService: ProjectService) {}
 
   @Post('create')
+  @UseGuards(AuthGuard('jwt'))
   async create(@Body() body: CreateProjectDto) {
     return await this.projectService.create(body);
   }
@@ -39,6 +39,7 @@ export class ProjectController {
   }
 
   @Patch('update/:id')
+  @UseGuards(AuthGuard('jwt'))
   async update(
     @Param('id') id: Types.ObjectId,
     @Body() body: UpdateProjectDto,
@@ -47,6 +48,7 @@ export class ProjectController {
   }
 
   @Delete('delete/:id')
+  @UseGuards(AuthGuard('jwt'))
   async delete(@Param('id') id: Types.ObjectId) {
     return await this.projectService.delete(id);
   }

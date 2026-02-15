@@ -19,11 +19,11 @@ import { UpdateSectionDto } from './dto/update-section.dto';
 import { CreateSectionDto } from './dto/create-section.dto';
 
 @Controller('section')
-@UseGuards(AuthGuard('jwt'))
 export class SectionController {
   constructor(private readonly sectionService: SectionService) {}
 
   @Post('create')
+  @UseGuards(AuthGuard('jwt'))
   async create(@Body() body: CreateSectionDto) {
     return await this.sectionService.create(body);
   }
@@ -39,6 +39,7 @@ export class SectionController {
   }
 
   @Patch('update/:id')
+  @UseGuards(AuthGuard('jwt'))
   async update(
     @Param('id') id: Types.ObjectId,
     @Body() body: UpdateSectionDto,
@@ -47,6 +48,7 @@ export class SectionController {
   }
 
   @Delete('delete/:id')
+  @UseGuards(AuthGuard('jwt'))
   async delete(@Param('id') id: Types.ObjectId) {
     return await this.sectionService.delete(id);
   }
