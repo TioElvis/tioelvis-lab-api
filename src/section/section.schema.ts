@@ -30,7 +30,6 @@ SectionSchema.pre('deleteOne', { document: true }, async function () {
     const SectionModel = this.model(Section.name);
     const ProjectModel = this.model(Project.name);
 
-    // Remove section references from the project
     await ProjectModel.updateMany(
       { sections: this._id },
       { $pull: { sections: this._id } },
