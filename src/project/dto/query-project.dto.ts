@@ -1,7 +1,5 @@
 import { IsEnum, IsOptional, IsString } from 'class-validator';
 
-import { QueryBooleanString } from 'src/query-boolean-string.dto';
-
 import { ProgrammingLanguage } from '../project.schema';
 
 export class QueryProjectDto {
@@ -18,6 +16,6 @@ export class QueryProjectDto {
   language: ProgrammingLanguage;
 
   @IsOptional()
-  @IsEnum(QueryBooleanString)
-  populate: QueryBooleanString;
+  @IsEnum(['true', 'false'])
+  populate: 'true' | 'false';
 }

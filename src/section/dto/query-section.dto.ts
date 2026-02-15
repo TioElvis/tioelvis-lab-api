@@ -1,7 +1,5 @@
 import { IsEnum, IsOptional, IsString } from 'class-validator';
 
-import { QueryBooleanString } from 'src/query-boolean-string.dto';
-
 export class QuerySectionDto {
   @IsOptional()
   @IsString()
@@ -12,6 +10,6 @@ export class QuerySectionDto {
   slug: string;
 
   @IsOptional()
-  @IsEnum(QueryBooleanString)
-  populate: QueryBooleanString;
+  @IsEnum(['true', 'false'])
+  populate: 'true' | 'false';
 }

@@ -15,7 +15,6 @@ import { CreateSectionDto } from './dto/create-section.dto';
 import { UpdateSectionDto } from './dto/update-section.dto';
 
 import { ProjectService } from 'src/project/project.service';
-import { QueryBooleanString } from 'src/query-boolean-string.dto';
 
 @Injectable()
 export class SectionService {
@@ -88,7 +87,7 @@ export class SectionService {
     }
 
     try {
-      if (query.populate === QueryBooleanString.TRUE) {
+      if (query.populate === 'true') {
         return await this.sectionModel.find(filter).populate('sections').exec();
       }
 
