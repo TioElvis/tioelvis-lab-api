@@ -17,4 +17,10 @@ export class AuthController {
   ) {
     return await this.authService.signIn(body, res);
   }
+
+  @Post('sign-out')
+  @HttpCode(200)
+  signOut(@Res({ passthrough: true }) res: FastifyReply) {
+    return this.authService.signOut(res);
+  }
 }

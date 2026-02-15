@@ -48,4 +48,20 @@ export class AuthService {
 
     return 'Signed in successfully';
   }
+
+  signOut(res: FastifyReply) {
+    res.clearCookie('token', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      path: '/',
+      domain:
+        process.env.NODE_ENV === 'production'
+          ? `.${process.env.DOMAIN}`
+          : 'localhost',
+      signed: true,
+    });
+
+    return 'Signed out successfully';
+  }
 }
