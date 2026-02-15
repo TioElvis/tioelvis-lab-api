@@ -14,8 +14,8 @@ import { QuerySectionDto } from './dto/query-section.dto';
 import { CreateSectionDto } from './dto/create-section.dto';
 import { UpdateSectionDto } from './dto/update-section.dto';
 
-import { QueryBooleanString } from 'src/global.dto';
 import { ProjectService } from 'src/project/project.service';
+import { QueryBooleanString } from 'src/query-boolean-string.dto';
 
 @Injectable()
 export class SectionService {

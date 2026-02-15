@@ -1,6 +1,6 @@
 import { IsEnum, IsOptional, IsString } from 'class-validator';
 
-import { QueryBooleanString } from 'src/global.dto';
+import { QueryBooleanString } from 'src/query-boolean-string.dto';
 
 export class QuerySectionDto {
   @IsOptional()
