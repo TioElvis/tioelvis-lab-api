@@ -8,13 +8,11 @@ import { InjectModel } from '@nestjs/mongoose';
 
 import { Project, ProjectDocument } from './project.schema';
 
-import {
-  QueryProjectBooleanString,
-  QueryProjectDto,
-} from './dto/query-project.dto';
+import { QueryProjectDto } from './dto/query-project.dto';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 
+import { QueryBooleanString } from 'src/global.dto';
 import { SectionService } from 'src/section/section.service';
 
 @Injectable()
@@ -63,7 +61,7 @@ export class ProjectService {
     }
 
     try {
-      if (query.populate === QueryProjectBooleanString.TRUE) {
+      if (query.populate === QueryBooleanString.TRUE) {
         return await this.projectModel.find(filter).populate('sections').exec();
       }
 
