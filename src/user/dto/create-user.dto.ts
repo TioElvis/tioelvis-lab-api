@@ -1,12 +1,11 @@
-import { IsEmail, IsString } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateUserDto {
+  @IsNotEmpty()
   @IsString()
-  name: string;
+  username: string;
 
-  @IsEmail({ host_whitelist: ['gmail.com'] })
-  email: string;
-
+  @IsNotEmpty()
   @IsString()
   password: string;
 }

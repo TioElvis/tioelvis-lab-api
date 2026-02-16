@@ -11,18 +11,17 @@ import { CreateUserDto } from './dto/create-user.dto';
 export class UserService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
-  async create({ email, ...body }: CreateUserDto) {
-    const existingUser = await this.userModel.findOne({ email });
+  async create({ username, password }: CreateUserDto) {
+    const existingUser = await this.userModel.findOne({ username });
 
     if (existingUser) {
-      throw new BadRequestException('User with this email already exists');
+      throw new BadRequestException('User with this username already exists');
     }
 
-    const hashedPassword = hashSync(body.password, 12);
+    const hashedPassword = hashSync(password, 12);
 
     const payload: User = {
-      email,
-      name: body.name,
+      username,
       password: hashedPassword,
     };
 

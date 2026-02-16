@@ -1,9 +1,9 @@
-import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export class SignInDto {
   @IsNotEmpty()
-  @IsEmail({ host_whitelist: ['gmail.com'] })
-  email: string;
+  @IsString()
+  username: string;
 
   @IsNotEmpty()
   @IsString()

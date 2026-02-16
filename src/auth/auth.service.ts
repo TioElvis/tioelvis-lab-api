@@ -16,21 +16,21 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async signIn({ email, password }: SignInDto, res: FastifyReply) {
-    const user = await this.userModel.findOne({ email }).exec();
+  async signIn({ username, password }: SignInDto, res: FastifyReply) {
+    const existingUser = await this.userModel.findOne({ username }).exec();
 
-    if (!user) {
-      throw new BadRequestException('Invalid email or password');
+    if (!existingUser) {
+      throw new BadRequestException('Invalid username or password');
     }
 
-    const isValidPassword = compareSync(password, user.password);
+    const isValidPassword = compareSync(password, existingUser.password);
 
     if (!isValidPassword) {
-      throw new BadRequestException('Invalid email or password');
+      throw new BadRequestException('Invalid username or password');
     }
 
     const jwt = this.jwtService.sign({
-      id: user._id,
+      id: existingUser._id,
     });
 
     res.setCookie('token', jwt, {
