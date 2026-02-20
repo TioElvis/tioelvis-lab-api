@@ -50,24 +50,38 @@ export class ProjectService {
   async find(query: QueryProjectDto) {
     const filter: Record<string, any> = {};
 
-    if (query.title) {
-      filter.title = { $regex: query.title, $options: 'i' };
-    }
+    if (query.title) filter.title = { $regex: query.title, $options: 'i' };
+    if (query.slug) filter.slug = query.slug;
+    if (query.language) filter.language = query.language;
 
-    if (query.slug) {
-      filter.slug = query.slug;
-    }
-
-    if (query.language) {
-      filter.language = query.language;
-    }
+    const page = Math.max(1, parseInt(query.page ?? '1'));
+    const limit = Math.max(1, parseInt(query.limit ?? '10'));
+    const skip = (page - 1) * limit;
 
     try {
-      if (query.populate === 'true') {
-        return await this.projectModel.find(filter).populate('sections').exec();
-      }
+      const baseQuery =
+        query.populate === 'true'
+          ? this.projectModel.find(filter).populate('sections')
+          : this.projectModel.find(filter);
 
-      return await this.projectModel.find(filter).exec();
+      const [projects, total] = await Promise.all([
+        baseQuery.skip(skip).limit(limit).exec(),
+        this.projectModel.countDocuments(filter).exec(),
+      ]);
+
+      const totalPages = Math.ceil(total / limit);
+
+      return {
+        projects,
+        meta: {
+          total,
+          page,
+          limit,
+          totalPages,
+          next: page < totalPages ? page + 1 : null,
+          prev: page > 1 ? page - 1 : null,
+        },
+      };
     } catch (error) {
       console.error('Error fetching projects:', error);
       throw new BadRequestException('Failed to fetch projects');
